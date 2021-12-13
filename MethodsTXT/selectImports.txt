@@ -1,0 +1,18 @@
+public Iterable<DeferredImportSelector.Group.Entry> selectImports() {
+    if (this.autoConfigurationEntries.isEmpty()) {
+        return Collections.emptyList();
+    } else {
+        //获取所有需要排除的配置类
+        Set<String> allExclusions = (Set)this.autoConfigurationEntries.stream().
+                map(AutoConfigurationImportSelector.AutoConfigurationEntry::getExclusions).flatMap(Collection::stream).collect(Collectors.toSet());
+        //获取所有经过自动化配置过滤器的配置类
+        Set<String> processedConfigurations = (Set)this.autoConfigurationEntries.stream().map(AutoConfigurationImportSelector.
+                AutoConfigurationEntry::getConfigurations).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+        //排除过滤后配置类中需要排除的类
+        processedConfigurations.removeAll(allExclusions);
+        return (Iterable)this.sortAutoConfigurations(processedConfigurations,
+                this.getAutoConfigurationMetadata()).stream().map((importClassName) -> {
+            return new DeferredImportSelector.Group.Entry((AnnotationMetadata)this.entries.get(importClassName), importClassName);
+        }).collect(Collectors.toList());
+    }
+}

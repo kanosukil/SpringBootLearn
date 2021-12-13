@@ -1,0 +1,9 @@
+public static List<String> loadFactoryNames(Class<?> factoryType, @Nullable ClassLoader classLoader) {
+    ClassLoader classLoaderToUse = classLoader;
+    if (classLoader == null) {
+        classLoaderToUse = SpringFactoriesLoader.class.getClassLoader();
+    }
+    String factoryTypeName = factoryType.getName();
+    //获取自动配置类
+    return (List)loadSpringFactories(classLoaderToUse).getOrDefault(factoryTypeName, Collections.emptyList());
+}

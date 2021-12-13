@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learnboot.springbootlearn.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="User">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userid"/>
+        <result column="user_name" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+    </resultMap>
+
+    <!--根据用户名密码查询用户信息-->
+    <!--application.yml 中通过 type-aliases-package 指定了实体类的为了，因此-->
+    <select id="getByUserNameAndPassword" resultMap="BaseResultMap">
+        select * from user where user_name = #{username} and
+                                 password = #{password}
+    </select>
+</mapper>
+
+<!--mapper 映射文件中 namespace 必须与对应的 mapper 接口的完全限定名一致-->
+<!--mapper 映射文件中 statement(select update delete insert) 的 id 必须为 mapper 接口的方法名一致-->
+<!--mapper 映射文件中 statement 的 parameterType 指定的类型必须和 mapper 接口中方法的参数类型一致-->
+<!--mapper 映射文件中 statement 的 resultType 指定类型必须和 mapper 接口中方法返回值类型一致-->

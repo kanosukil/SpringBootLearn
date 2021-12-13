@@ -1,0 +1,15 @@
+public class MessageSourceProperties {
+    private String basename = "messages";
+    private Charset encoding;
+    @DurationUnit(ChronoUnit.SECONDS)
+    private Duration cacheDuration;
+    private boolean fallbackToSystemLocale;
+    private boolean alwaysUseMessageFormat;
+    private boolean useCodeAsDefaultMessage;
+    public MessageSourceProperties() {
+        this.encoding = StandardCharsets.UTF_8;
+        this.fallbackToSystemLocale = true;
+        this.alwaysUseMessageFormat = false;
+        this.useCodeAsDefaultMessage = false;
+    }
+}

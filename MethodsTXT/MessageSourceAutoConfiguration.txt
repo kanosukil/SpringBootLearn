@@ -1,0 +1,43 @@
+@Configuration(proxyBeanMethods = false)
+@ConditionalOnMissingBean(name = AbstractApplicationContext.MESSAGE_SOURCE_BEAN_NAME, search = SearchStrategy.CURRENT)
+@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
+@Conditional(org.springframework.boot.autoconfigure.context.MessageSourceAutoConfiguration.ResourceBundleCondition.class)
+@EnableConfigurationProperties
+public class MessageSourceAutoConfiguration {
+
+    private static final Resource[] NO_RESOURCES = {};
+
+    // 将 MessageSourceProperties 以组件的形式添加到容器中
+    // MessageSourceProperties 下的每个属性都与以 spring.messages 开头的属性对应
+    @Bean
+    @ConfigurationProperties(prefix = "spring.messages")
+    public MessageSourceProperties messageSourceProperties() {
+        return new MessageSourceProperties();
+    }
+
+    //Spring Boot 会从容器中获取 MessageSourceProperties
+    // 读取国际化资源文件的 basename（基本名）、encoding（编码）等信息
+    // 并封装到 ResourceBundleMessageSource 中
+    @Bean
+    public MessageSource messageSource(MessageSourceProperties properties) {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        //读取国际化资源文件的 basename (基本名),并封装到 ResourceBundleMessageSource 中
+        if (StringUtils.hasText(properties.getBasename())) {
+            messageSource.setBasenames(StringUtils
+                    .commaDelimitedListToStringArray(StringUtils.trimAllWhitespace(properties.getBasename())));
+        }
+        //读取国际化资源文件的 encoding (编码),并封装到 ResourceBundleMessageSource 中
+        if (properties.getEncoding() != null) {
+            messageSource.setDefaultEncoding(properties.getEncoding().name());
+        }
+        messageSource.setFallbackToSystemLocale(properties.isFallbackToSystemLocale());
+        Duration cacheDuration = properties.getCacheDuration();
+        if (cacheDuration != null) {
+            messageSource.setCacheMillis(cacheDuration.toMillis());
+        }
+        messageSource.setAlwaysUseMessageFormat(properties.isAlwaysUseMessageFormat());
+        messageSource.setUseCodeAsDefaultMessage(properties.isUseCodeAsDefaultMessage());
+        return messageSource;
+    }
+    ...
+}

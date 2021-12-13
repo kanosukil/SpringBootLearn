@@ -1,0 +1,12 @@
+protected ModelAndView resolveErrorView(HttpServletRequest request, HttpServletResponse response, HttpStatus status,
+                                        Map<String, Object> model) {
+    //获取容器中的所有的错误视图解析器来处理该异常信息
+    for (ErrorViewResolver resolver : this.errorViewResolvers) {
+        //调用错误视图解析器的 resolveErrorView 解析到错误视图页面
+        ModelAndView modelAndView = resolver.resolveErrorView(request, status, model);
+        if (modelAndView != null) {
+            return modelAndView;
+        }
+    }
+    return null;
+}

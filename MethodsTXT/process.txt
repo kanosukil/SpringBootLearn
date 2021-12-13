@@ -1,0 +1,18 @@
+public void process(AnnotationMetadata annotationMetadata, DeferredImportSelector deferredImportSelector) {
+    Assert.state(deferredImportSelector instanceof AutoConfigurationImportSelector, () -> {
+        return String.format("Only %s implementations are supported, got %s", AutoConfigurationImportSelector.class.getSimpleName(), deferredImportSelector.getClass().getName());
+    });
+    //拿到 META-INF/spring.factories中的EnableAutoConfiguration，并做排除、过滤处理
+    //AutoConfigurationEntry里有需要引入配置类和排除掉的配置类，最终只要返回需要配置的配置类
+    AutoConfigurationImportSelector.AutoConfigurationEntry autoConfigurationEntry = ((AutoConfigurationImportSelector)deferredImportSelector).getAutoConfigurationEntry(annotationMetadata);
+    //加入缓存,List<AutoConfigurationEntry>类型
+    this.autoConfigurationEntries.add(autoConfigurationEntry);
+    Iterator var4 = autoConfigurationEntry.getConfigurations().iterator();
+
+    while(var4.hasNext()) {
+        String importClassName = (String)var4.next();
+        //加入缓存，Map<String, AnnotationMetadata>类型
+        //不存在就加入,存在则跳过 (putIfAbsent()方法)
+        this.entries.putIfAbsent(importClassName, annotationMetadata);
+    }
+}

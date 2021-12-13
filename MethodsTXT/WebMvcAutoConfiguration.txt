@@ -1,0 +1,18 @@
+public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    if (!this.resourceProperties.isAddMappings()) {
+        logger.debug("Default resource handling disabled");
+    } else {
+        //WebJars 映射规则
+        this.addResourceHandler(registry, "/webjars/**", "classpath:/META-INF/resources/webjars/");
+        this.addResourceHandler(registry, this.mvcProperties.getStaticPathPattern(), (registration) -> {
+            registration.addResourceLocations(this.resourceProperties.getStaticLocations());
+            if (this.servletContext != null) {
+                ServletContextResource resource = new ServletContextResource(this.servletContext, "/");
+                registration.addResourceLocations(new Resource[]{resource});
+            }
+
+        });
+    }
+}
+
+// 可见 WebJars 的映射路径为 "/webjars/**" 即所有访问 "/webjars/**" 的请求,都会去"classpath:/META-INF/resources/webjars/" 查找 WebJars 前端资源.

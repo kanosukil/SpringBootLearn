@@ -1,0 +1,4 @@
+public Class<? extends Group> getImportGroup() {
+        //获取实现了 DeferredImportSelector.Gorup 接口的 AutoConfigurationImportSelector.AutoConfigurationGroup 类
+        return AutoConfigurationImportSelector.AutoConfigurationGroup.class;
+}

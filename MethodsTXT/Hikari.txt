@@ -1,0 +1,26 @@
+@Configuration(
+    proxyBeanMethods = false
+)
+@ConditionalOnClass({HikariDataSource.class})
+@ConditionalOnMissingBean({DataSource.class})
+@ConditionalOnProperty(
+    name = {"spring.datasource.type"},
+    havingValue = "com.zaxxer.hikari.HikariDataSource",
+    matchIfMissing = true
+)
+static class Hikari {
+    Hikari() {
+    }
+
+    @Bean
+    @ConfigurationProperties(
+        prefix = "spring.datasource.hikari"
+    )
+    HikariDataSource dataSource(DataSourceProperties properties) {
+        HikariDataSource dataSource = (HikariDataSource)DataSourceConfiguration.createDataSource(properties, HikariDataSource.class);
+        if (StringUtils.hasText(properties.getName())) {
+            dataSource.setPoolName(properties.getName());
+        }
+        return dataSource;
+    }
+}

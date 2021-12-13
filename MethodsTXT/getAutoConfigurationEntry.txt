@@ -1,0 +1,23 @@
+protected AutoConfigurationImportSelector.AutoConfigurationEntry getAutoConfigurationEntry(AnnotationMetadata annotationMetadata) {
+    if (!this.isEnabled(annotationMetadata)) {
+        return EMPTY_ENTRY;
+    } else {
+        //获取注解元数据中的属性设置
+        AnnotationAttributes attributes = this.getAttributes(annotationMetadata);
+        //获取自动配置类类名
+        List<String> configurations = this.getCandidateConfigurations(annotationMetadata, attributes);
+        //删除list 集合中重复的配置类
+        configurations = this.removeDuplicates(configurations);
+        //获取排除配置类
+        Set<String> exclusions = this.getExclusions(annotationMetadata, attributes);
+        //检查是否还存在排除配置类
+        this.checkExcludedClasses(configurations, exclusions);
+        //删除排除的配置类
+        configurations.removeAll(exclusions);
+        //获取过滤器，过滤配置类
+        configurations = this.getConfigurationClassFilter().filter(configurations);
+        //触发自动化配置导入事件
+        this.fireAutoConfigurationImportEvents(configurations, exclusions);
+        return new AutoConfigurationImportSelector.AutoConfigurationEntry(configurations, exclusions);
+    }
+}

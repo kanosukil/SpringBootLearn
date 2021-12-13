@@ -1,0 +1,45 @@
+private static Map<String, List<String>> loadSpringFactories(ClassLoader classLoader) {
+    Map<String, List<String>> result = (Map)cache.get(classLoader);
+    if (result != null) {
+        return result;
+    } else {
+        HashMap result = new HashMap();
+    try {
+        //扫描所有 Jar 包类路径下的 META-INF/spring.factories 文件
+        Enumeration urls = classLoader.getResources("META-INF/spring.factories");
+        while(urls.hasMoreElements()) {
+                URL url = (URL)urls.nextElement();
+                UrlResource resource = new UrlResource(url);
+                //将扫描到的 META-INF/spring.factories 文件中内容包装成 properties 对象
+                Properties properties = PropertiesLoaderUtils.loadProperties(resource);
+                Iterator var6 = properties.entrySet().iterator();
+                while(var6.hasNext()) {
+                    Map.Entry<?, ?> entry = (Map.Entry)var6.next();
+                    //提取 properties 对象中的 key 值
+                    String factoryTypeName = ((String)entry.getKey()).trim();
+                    //提取 proper 对象中的 value 值（多个类的完全限定名使用逗号连接的字符串）
+                    // 使用逗号为分隔符转换为数组，数组内每个元素都是配置类的完全限定名
+                    String[] factoryImplementationNames = StringUtils.commaDelimitedListToStringArray((String)entry.getValue());
+                    String[] var10 = factoryImplementationNames;
+                    int var11 = factoryImplementationNames.length;
+                    //遍历配置类数组，并将数组转换为 list 集合
+                    for(int var12 = 0; var12 < var11; ++var12) {
+                        String factoryImplementationName = var10[var12];
+                        ((List)result.computeIfAbsent(factoryTypeName, (key) -> {
+                            return new ArrayList();
+                        })).add(factoryImplementationName.trim());
+                    }
+                }
+            }
+            //将 propertise 对象的 key 与由配置类组成的 List 集合一一对应存入名为 result 的 Map 中
+            result.replaceAll((factoryType, implementations) -> {
+                return (List)implementations.stream().distinct().collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+            });
+            cache.put(classLoader, result);
+            //返回 result
+            return result;
+        } catch (IOException var14) {
+            throw new IllegalArgumentException("Unable to load factories from location [META-INF/spring.factories]", var14);
+        }
+     }
+}

@@ -1,0 +1,1359 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
+
+package org.springframework.boot.autoconfigure.web;
+
+import java.io.File;
+import java.net.InetAddress;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.DeprecatedConfigurationProperty;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
+import org.springframework.boot.convert.DurationUnit;
+import org.springframework.boot.web.server.Compression;
+import org.springframework.boot.web.server.Http2;
+import org.springframework.boot.web.server.Shutdown;
+import org.springframework.boot.web.server.Ssl;
+import org.springframework.boot.web.servlet.server.Encoding;
+import org.springframework.boot.web.servlet.server.Jsp;
+import org.springframework.boot.web.servlet.server.Session;
+import org.springframework.util.StringUtils;
+import org.springframework.util.unit.DataSize;
+
+@ConfigurationProperties(
+    prefix = "server",
+    ignoreUnknownFields = true
+)
+public class ServerProperties {
+    private Integer port;
+    private InetAddress address;
+    @NestedConfigurationProperty
+    private final ErrorProperties error = new ErrorProperties();
+    private ServerProperties.ForwardHeadersStrategy forwardHeadersStrategy;
+    private String serverHeader;
+    private DataSize maxHttpHeaderSize = DataSize.ofKilobytes(8L);
+    private Shutdown shutdown;
+    @NestedConfigurationProperty
+    private Ssl ssl;
+    @NestedConfigurationProperty
+    private final Compression compression;
+    @NestedConfigurationProperty
+    private final Http2 http2;
+    private final ServerProperties.Servlet servlet;
+    private final ServerProperties.Tomcat tomcat;
+    private final ServerProperties.Jetty jetty;
+    private final ServerProperties.Netty netty;
+    private final ServerProperties.Undertow undertow;
+
+    public ServerProperties() {
+        this.shutdown = Shutdown.IMMEDIATE;
+        this.compression = new Compression();
+        this.http2 = new Http2();
+        this.servlet = new ServerProperties.Servlet();
+        this.tomcat = new ServerProperties.Tomcat();
+        this.jetty = new ServerProperties.Jetty();
+        this.netty = new ServerProperties.Netty();
+        this.undertow = new ServerProperties.Undertow();
+    }
+
+    public Integer getPort() {
+        return this.port;
+    }
+
+    public void setPort(Integer port) {
+        this.port = port;
+    }
+
+    public InetAddress getAddress() {
+        return this.address;
+    }
+
+    public void setAddress(InetAddress address) {
+        this.address = address;
+    }
+
+    public String getServerHeader() {
+        return this.serverHeader;
+    }
+
+    public void setServerHeader(String serverHeader) {
+        this.serverHeader = serverHeader;
+    }
+
+    public DataSize getMaxHttpHeaderSize() {
+        return this.maxHttpHeaderSize;
+    }
+
+    public void setMaxHttpHeaderSize(DataSize maxHttpHeaderSize) {
+        this.maxHttpHeaderSize = maxHttpHeaderSize;
+    }
+
+    public Shutdown getShutdown() {
+        return this.shutdown;
+    }
+
+    public void setShutdown(Shutdown shutdown) {
+        this.shutdown = shutdown;
+    }
+
+    public ErrorProperties getError() {
+        return this.error;
+    }
+
+    public Ssl getSsl() {
+        return this.ssl;
+    }
+
+    public void setSsl(Ssl ssl) {
+        this.ssl = ssl;
+    }
+
+    public Compression getCompression() {
+        return this.compression;
+    }
+
+    public Http2 getHttp2() {
+        return this.http2;
+    }
+
+    public ServerProperties.Servlet getServlet() {
+        return this.servlet;
+    }
+
+    public ServerProperties.Tomcat getTomcat() {
+        return this.tomcat;
+    }
+
+    public ServerProperties.Jetty getJetty() {
+        return this.jetty;
+    }
+
+    public ServerProperties.Netty getNetty() {
+        return this.netty;
+    }
+
+    public ServerProperties.Undertow getUndertow() {
+        return this.undertow;
+    }
+
+    public ServerProperties.ForwardHeadersStrategy getForwardHeadersStrategy() {
+        return this.forwardHeadersStrategy;
+    }
+
+    public void setForwardHeadersStrategy(ServerProperties.ForwardHeadersStrategy forwardHeadersStrategy) {
+        this.forwardHeadersStrategy = forwardHeadersStrategy;
+    }
+
+    public static enum ForwardHeadersStrategy {
+        NATIVE,
+        FRAMEWORK,
+        NONE;
+
+        private ForwardHeadersStrategy() {
+        }
+    }
+
+    public static class Undertow {
+        private DataSize maxHttpPostSize = DataSize.ofBytes(-1L);
+        private DataSize bufferSize;
+        private Boolean directBuffers;
+        private boolean eagerFilterInit = true;
+        private int maxParameters = 1000;
+        private int maxHeaders = 200;
+        private int maxCookies = 200;
+        private boolean allowEncodedSlash = false;
+        private boolean decodeUrl = true;
+        private Charset urlCharset;
+        private boolean alwaysSetKeepAlive;
+        private Duration noRequestTimeout;
+        private final ServerProperties.Undertow.Accesslog accesslog;
+        private final ServerProperties.Undertow.Threads threads;
+        private final ServerProperties.Undertow.Options options;
+
+        public Undertow() {
+            this.urlCharset = StandardCharsets.UTF_8;
+            this.alwaysSetKeepAlive = true;
+            this.accesslog = new ServerProperties.Undertow.Accesslog();
+            this.threads = new ServerProperties.Undertow.Threads();
+            this.options = new ServerProperties.Undertow.Options();
+        }
+
+        public DataSize getMaxHttpPostSize() {
+            return this.maxHttpPostSize;
+        }
+
+        public void setMaxHttpPostSize(DataSize maxHttpPostSize) {
+            this.maxHttpPostSize = maxHttpPostSize;
+        }
+
+        public DataSize getBufferSize() {
+            return this.bufferSize;
+        }
+
+        public void setBufferSize(DataSize bufferSize) {
+            this.bufferSize = bufferSize;
+        }
+
+        /** @deprecated */
+        @Deprecated
+        @DeprecatedConfigurationProperty(
+            replacement = "server.undertow.threads.io"
+        )
+        public Integer getIoThreads() {
+            return this.getThreads().getIo();
+        }
+
+        /** @deprecated */
+        @Deprecated
+        public void setIoThreads(Integer ioThreads) {
+            this.getThreads().setIo(ioThreads);
+        }
+
+        /** @deprecated */
+        @Deprecated
+        @DeprecatedConfigurationProperty(
+            replacement = "server.undertow.threads.worker"
+        )
+        public Integer getWorkerThreads() {
+            return this.getThreads().getWorker();
+        }
+
+        /** @deprecated */
+        @Deprecated
+        public void setWorkerThreads(Integer workerThreads) {
+            this.getThreads().setWorker(workerThreads);
+        }
+
+        public Boolean getDirectBuffers() {
+            return this.directBuffers;
+        }
+
+        public void setDirectBuffers(Boolean directBuffers) {
+            this.directBuffers = directBuffers;
+        }
+
+        public boolean isEagerFilterInit() {
+            return this.eagerFilterInit;
+        }
+
+        public void setEagerFilterInit(boolean eagerFilterInit) {
+            this.eagerFilterInit = eagerFilterInit;
+        }
+
+        public int getMaxParameters() {
+            return this.maxParameters;
+        }
+
+        public void setMaxParameters(Integer maxParameters) {
+            this.maxParameters = maxParameters;
+        }
+
+        public int getMaxHeaders() {
+            return this.maxHeaders;
+        }
+
+        public void setMaxHeaders(int maxHeaders) {
+            this.maxHeaders = maxHeaders;
+        }
+
+        public Integer getMaxCookies() {
+            return this.maxCookies;
+        }
+
+        public void setMaxCookies(Integer maxCookies) {
+            this.maxCookies = maxCookies;
+        }
+
+        public boolean isAllowEncodedSlash() {
+            return this.allowEncodedSlash;
+        }
+
+        public void setAllowEncodedSlash(boolean allowEncodedSlash) {
+            this.allowEncodedSlash = allowEncodedSlash;
+        }
+
+        public boolean isDecodeUrl() {
+            return this.decodeUrl;
+        }
+
+        public void setDecodeUrl(Boolean decodeUrl) {
+            this.decodeUrl = decodeUrl;
+        }
+
+        public Charset getUrlCharset() {
+            return this.urlCharset;
+        }
+
+        public void setUrlCharset(Charset urlCharset) {
+            this.urlCharset = urlCharset;
+        }
+
+        public boolean isAlwaysSetKeepAlive() {
+            return this.alwaysSetKeepAlive;
+        }
+
+        public void setAlwaysSetKeepAlive(boolean alwaysSetKeepAlive) {
+            this.alwaysSetKeepAlive = alwaysSetKeepAlive;
+        }
+
+        public Duration getNoRequestTimeout() {
+            return this.noRequestTimeout;
+        }
+
+        public void setNoRequestTimeout(Duration noRequestTimeout) {
+            this.noRequestTimeout = noRequestTimeout;
+        }
+
+        public ServerProperties.Undertow.Accesslog getAccesslog() {
+            return this.accesslog;
+        }
+
+        public ServerProperties.Undertow.Threads getThreads() {
+            return this.threads;
+        }
+
+        public ServerProperties.Undertow.Options getOptions() {
+            return this.options;
+        }
+
+        public static class Options {
+            private Map<String, String> socket = new LinkedHashMap();
+            private Map<String, String> server = new LinkedHashMap();
+
+            public Options() {
+            }
+
+            public Map<String, String> getServer() {
+                return this.server;
+            }
+
+            public Map<String, String> getSocket() {
+                return this.socket;
+            }
+        }
+
+        public static class Threads {
+            private Integer io;
+            private Integer worker;
+
+            public Threads() {
+            }
+
+            public Integer getIo() {
+                return this.io;
+            }
+
+            public void setIo(Integer io) {
+                this.io = io;
+            }
+
+            public Integer getWorker() {
+                return this.worker;
+            }
+
+            public void setWorker(Integer worker) {
+                this.worker = worker;
+            }
+        }
+
+        public static class Accesslog {
+            private boolean enabled = false;
+            private String pattern = "common";
+            protected String prefix = "access_log.";
+            private String suffix = "log";
+            private File dir = new File("logs");
+            private boolean rotate = true;
+
+            public Accesslog() {
+            }
+
+            public boolean isEnabled() {
+                return this.enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
+            }
+
+            public String getPattern() {
+                return this.pattern;
+            }
+
+            public void setPattern(String pattern) {
+                this.pattern = pattern;
+            }
+
+            public String getPrefix() {
+                return this.prefix;
+            }
+
+            public void setPrefix(String prefix) {
+                this.prefix = prefix;
+            }
+
+            public String getSuffix() {
+                return this.suffix;
+            }
+
+            public void setSuffix(String suffix) {
+                this.suffix = suffix;
+            }
+
+            public File getDir() {
+                return this.dir;
+            }
+
+            public void setDir(File dir) {
+                this.dir = dir;
+            }
+
+            public boolean isRotate() {
+                return this.rotate;
+            }
+
+            public void setRotate(boolean rotate) {
+                this.rotate = rotate;
+            }
+        }
+    }
+
+    public static class Netty {
+        private Duration connectionTimeout;
+
+        public Netty() {
+        }
+
+        public Duration getConnectionTimeout() {
+            return this.connectionTimeout;
+        }
+
+        public void setConnectionTimeout(Duration connectionTimeout) {
+            this.connectionTimeout = connectionTimeout;
+        }
+    }
+
+    public static class Jetty {
+        private final ServerProperties.Jetty.Accesslog accesslog = new ServerProperties.Jetty.Accesslog();
+        private final ServerProperties.Jetty.Threads threads = new ServerProperties.Jetty.Threads();
+        private DataSize maxHttpFormPostSize = DataSize.ofBytes(200000L);
+        private Duration connectionIdleTimeout;
+
+        public Jetty() {
+        }
+
+        public ServerProperties.Jetty.Accesslog getAccesslog() {
+            return this.accesslog;
+        }
+
+        public ServerProperties.Jetty.Threads getThreads() {
+            return this.threads;
+        }
+
+        public DataSize getMaxHttpFormPostSize() {
+            return this.maxHttpFormPostSize;
+        }
+
+        public void setMaxHttpFormPostSize(DataSize maxHttpFormPostSize) {
+            this.maxHttpFormPostSize = maxHttpFormPostSize;
+        }
+
+        /** @deprecated */
+        @Deprecated
+        @DeprecatedConfigurationProperty(
+            replacement = "server.jetty.threads.acceptors"
+        )
+        public Integer getAcceptors() {
+            return this.getThreads().getAcceptors();
+        }
+
+        /** @deprecated */
+        @Deprecated
+        public void setAcceptors(Integer acceptors) {
+            this.getThreads().setAcceptors(acceptors);
+        }
+
+        /** @deprecated */
+        @Deprecated
+        @DeprecatedConfigurationProperty(
+            replacement = "server.jetty.threads.selectors"
+        )
+        public Integer getSelectors() {
+            return this.getThreads().getSelectors();
+        }
+
+        /** @deprecated */
+        @Deprecated
+        public void setSelectors(Integer selectors) {
+            this.getThreads().setSelectors(selectors);
+        }
+
+        /** @deprecated */
+        @Deprecated
+        @DeprecatedConfigurationProperty(
+            replacement = "server.jetty.threads.min"
+        )
+        public Integer getMinThreads() {
+            return this.getThreads().getMin();
+        }
+
+        /** @deprecated */
+        @Deprecated
+        public void setMinThreads(Integer minThreads) {
+            this.getThreads().setMin(minThreads);
+        }
+
+        /** @deprecated */
+        @Deprecated
+        @DeprecatedConfigurationProperty(
+            replacement = "server.jetty.threads.max"
+        )
+        public Integer getMaxThreads() {
+            return this.getThreads().getMax();
+        }
+
+        /** @deprecated */
+        @Deprecated
+        public void setMaxThreads(Integer maxThreads) {
+            this.getThreads().setMax(maxThreads);
+        }
+
+        /** @deprecated */
+        @Deprecated
+        @DeprecatedConfigurationProperty(
+            replacement = "server.jetty.threads.max-queue-capacity"
+        )
+        public Integer getMaxQueueCapacity() {
+            return this.getThreads().getMaxQueueCapacity();
+        }
+
+        /** @deprecated */
+        @Deprecated
+        public void setMaxQueueCapacity(Integer maxQueueCapacity) {
+            this.getThreads().setMaxQueueCapacity(maxQueueCapacity);
+        }
+
+        /** @deprecated */
+        @Deprecated
+        @DeprecatedConfigurationProperty(
+            replacement = "server.jetty.threads.idle-timeout"
+        )
+        public Duration getThreadIdleTimeout() {
+            return this.getThreads().getIdleTimeout();
+        }
+
+        /** @deprecated */
+        @Deprecated
+        public void setThreadIdleTimeout(Duration threadIdleTimeout) {
+            this.getThreads().setIdleTimeout(threadIdleTimeout);
+        }
+
+        public Duration getConnectionIdleTimeout() {
+            return this.connectionIdleTimeout;
+        }
+
+        public void setConnectionIdleTimeout(Duration connectionIdleTimeout) {
+            this.connectionIdleTimeout = connectionIdleTimeout;
+        }
+
+        public static class Threads {
+            private Integer acceptors = -1;
+            private Integer selectors = -1;
+            private Integer max = 200;
+            private Integer min = 8;
+            private Integer maxQueueCapacity;
+            private Duration idleTimeout = Duration.ofMillis(60000L);
+
+            public Threads() {
+            }
+
+            public Integer getAcceptors() {
+                return this.acceptors;
+            }
+
+            public void setAcceptors(Integer acceptors) {
+                this.acceptors = acceptors;
+            }
+
+            public Integer getSelectors() {
+                return this.selectors;
+            }
+
+            public void setSelectors(Integer selectors) {
+                this.selectors = selectors;
+            }
+
+            public void setMin(Integer min) {
+                this.min = min;
+            }
+
+            public Integer getMin() {
+                return this.min;
+            }
+
+            public void setMax(Integer max) {
+                this.max = max;
+            }
+
+            public Integer getMax() {
+                return this.max;
+            }
+
+            public Integer getMaxQueueCapacity() {
+                return this.maxQueueCapacity;
+            }
+
+            public void setMaxQueueCapacity(Integer maxQueueCapacity) {
+                this.maxQueueCapacity = maxQueueCapacity;
+            }
+
+            public void setIdleTimeout(Duration idleTimeout) {
+                this.idleTimeout = idleTimeout;
+            }
+
+            public Duration getIdleTimeout() {
+                return this.idleTimeout;
+            }
+        }
+
+        public static class Accesslog {
+            private boolean enabled = false;
+            private ServerProperties.Jetty.Accesslog.FORMAT format;
+            private String customFormat;
+            private String filename;
+            private String fileDateFormat;
+            private int retentionPeriod;
+            private boolean append;
+            private List<String> ignorePaths;
+
+            public Accesslog() {
+                this.format = ServerProperties.Jetty.Accesslog.FORMAT.NCSA;
+                this.retentionPeriod = 31;
+            }
+
+            public boolean isEnabled() {
+                return this.enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
+            }
+
+            public ServerProperties.Jetty.Accesslog.FORMAT getFormat() {
+                return this.format;
+            }
+
+            public void setFormat(ServerProperties.Jetty.Accesslog.FORMAT format) {
+                this.format = format;
+            }
+
+            public String getCustomFormat() {
+                return this.customFormat;
+            }
+
+            public void setCustomFormat(String customFormat) {
+                this.customFormat = customFormat;
+            }
+
+            public String getFilename() {
+                return this.filename;
+            }
+
+            public void setFilename(String filename) {
+                this.filename = filename;
+            }
+
+            public String getFileDateFormat() {
+                return this.fileDateFormat;
+            }
+
+            public void setFileDateFormat(String fileDateFormat) {
+                this.fileDateFormat = fileDateFormat;
+            }
+
+            public int getRetentionPeriod() {
+                return this.retentionPeriod;
+            }
+
+            public void setRetentionPeriod(int retentionPeriod) {
+                this.retentionPeriod = retentionPeriod;
+            }
+
+            public boolean isAppend() {
+                return this.append;
+            }
+
+            public void setAppend(boolean append) {
+                this.append = append;
+            }
+
+            public List<String> getIgnorePaths() {
+                return this.ignorePaths;
+            }
+
+            public void setIgnorePaths(List<String> ignorePaths) {
+                this.ignorePaths = ignorePaths;
+            }
+
+            public static enum FORMAT {
+                NCSA,
+                EXTENDED_NCSA;
+
+                private FORMAT() {
+                }
+            }
+        }
+    }
+
+    public static class Tomcat {
+        private final ServerProperties.Tomcat.Accesslog accesslog = new ServerProperties.Tomcat.Accesslog();
+        private final ServerProperties.Tomcat.Threads threads = new ServerProperties.Tomcat.Threads();
+        private File basedir;
+        @DurationUnit(ChronoUnit.SECONDS)
+        private Duration backgroundProcessorDelay = Duration.ofSeconds(10L);
+        private DataSize maxHttpFormPostSize = DataSize.ofMegabytes(2L);
+        private DataSize maxSwallowSize = DataSize.ofMegabytes(2L);
+        private Boolean redirectContextRoot = true;
+        private boolean useRelativeRedirects;
+        private Charset uriEncoding;
+        private int maxConnections;
+        private int acceptCount;
+        private int processorCache;
+        private List<String> additionalTldSkipPatterns;
+        private List<Character> relaxedPathChars;
+        private List<Character> relaxedQueryChars;
+        private Duration connectionTimeout;
+        private final ServerProperties.Tomcat.Resource resource;
+        private final ServerProperties.Tomcat.Mbeanregistry mbeanregistry;
+        private final ServerProperties.Tomcat.Remoteip remoteip;
+
+        public Tomcat() {
+            this.uriEncoding = StandardCharsets.UTF_8;
+            this.maxConnections = 8192;
+            this.acceptCount = 100;
+            this.processorCache = 200;
+            this.additionalTldSkipPatterns = new ArrayList();
+            this.relaxedPathChars = new ArrayList();
+            this.relaxedQueryChars = new ArrayList();
+            this.resource = new ServerProperties.Tomcat.Resource();
+            this.mbeanregistry = new ServerProperties.Tomcat.Mbeanregistry();
+            this.remoteip = new ServerProperties.Tomcat.Remoteip();
+        }
+
+        /** @deprecated */
+        @Deprecated
+        @DeprecatedConfigurationProperty(
+            replacement = "server.tomcat.threads.max"
+        )
+        public int getMaxThreads() {
+            return this.getThreads().getMax();
+        }
+
+        /** @deprecated */
+        @Deprecated
+        public void setMaxThreads(int maxThreads) {
+            this.getThreads().setMax(maxThreads);
+        }
+
+        /** @deprecated */
+        @Deprecated
+        @DeprecatedConfigurationProperty(
+            replacement = "server.tomcat.threads.min-spare"
+        )
+        public int getMinSpareThreads() {
+            return this.getThreads().getMinSpare();
+        }
+
+        /** @deprecated */
+        @Deprecated
+        public void setMinSpareThreads(int minSpareThreads) {
+            this.getThreads().setMinSpare(minSpareThreads);
+        }
+
+        public DataSize getMaxHttpFormPostSize() {
+            return this.maxHttpFormPostSize;
+        }
+
+        public void setMaxHttpFormPostSize(DataSize maxHttpFormPostSize) {
+            this.maxHttpFormPostSize = maxHttpFormPostSize;
+        }
+
+        public ServerProperties.Tomcat.Accesslog getAccesslog() {
+            return this.accesslog;
+        }
+
+        public ServerProperties.Tomcat.Threads getThreads() {
+            return this.threads;
+        }
+
+        public Duration getBackgroundProcessorDelay() {
+            return this.backgroundProcessorDelay;
+        }
+
+        public void setBackgroundProcessorDelay(Duration backgroundProcessorDelay) {
+            this.backgroundProcessorDelay = backgroundProcessorDelay;
+        }
+
+        public File getBasedir() {
+            return this.basedir;
+        }
+
+        public void setBasedir(File basedir) {
+            this.basedir = basedir;
+        }
+
+        /** @deprecated */
+        @DeprecatedConfigurationProperty(
+            replacement = "server.tomcat.remoteip.internal-proxies"
+        )
+        @Deprecated
+        public String getInternalProxies() {
+            return this.remoteip.getInternalProxies();
+        }
+
+        /** @deprecated */
+        @Deprecated
+        public void setInternalProxies(String internalProxies) {
+            this.remoteip.setInternalProxies(internalProxies);
+        }
+
+        /** @deprecated */
+        @DeprecatedConfigurationProperty(
+            replacement = "server.tomcat.remoteip.protocol-header"
+        )
+        @Deprecated
+        public String getProtocolHeader() {
+            return this.remoteip.getProtocolHeader();
+        }
+
+        /** @deprecated */
+        @Deprecated
+        public void setProtocolHeader(String protocolHeader) {
+            this.remoteip.setProtocolHeader(protocolHeader);
+        }
+
+        /** @deprecated */
+        @DeprecatedConfigurationProperty(
+            replacement = "server.tomcat.remoteip.protocol-header-https-value"
+        )
+        @Deprecated
+        public String getProtocolHeaderHttpsValue() {
+            return this.remoteip.getProtocolHeaderHttpsValue();
+        }
+
+        /** @deprecated */
+        @Deprecated
+        public void setProtocolHeaderHttpsValue(String protocolHeaderHttpsValue) {
+            this.remoteip.setProtocolHeaderHttpsValue(protocolHeaderHttpsValue);
+        }
+
+        /** @deprecated */
+        @DeprecatedConfigurationProperty(
+            replacement = "server.tomcat.remoteip.host-header"
+        )
+        @Deprecated
+        public String getHostHeader() {
+            return this.remoteip.getHostHeader();
+        }
+
+        /** @deprecated */
+        @Deprecated
+        public void setHostHeader(String hostHeader) {
+            this.remoteip.setHostHeader(hostHeader);
+        }
+
+        /** @deprecated */
+        @DeprecatedConfigurationProperty(
+            replacement = "server.tomcat.remote.port-header"
+        )
+        @Deprecated
+        public String getPortHeader() {
+            return this.remoteip.getPortHeader();
+        }
+
+        /** @deprecated */
+        @Deprecated
+        public void setPortHeader(String portHeader) {
+            this.remoteip.setPortHeader(portHeader);
+        }
+
+        /** @deprecated */
+        @DeprecatedConfigurationProperty(
+            replacement = "server.tomcat.remoteip.remote-ip-header"
+        )
+        @Deprecated
+        public String getRemoteIpHeader() {
+            return this.remoteip.getRemoteIpHeader();
+        }
+
+        /** @deprecated */
+        @Deprecated
+        public void setRemoteIpHeader(String remoteIpHeader) {
+            this.remoteip.setRemoteIpHeader(remoteIpHeader);
+        }
+
+        public Boolean getRedirectContextRoot() {
+            return this.redirectContextRoot;
+        }
+
+        public void setRedirectContextRoot(Boolean redirectContextRoot) {
+            this.redirectContextRoot = redirectContextRoot;
+        }
+
+        /** @deprecated */
+        @Deprecated
+        public Boolean getUseRelativeRedirects() {
+            return this.useRelativeRedirects;
+        }
+
+        public boolean isUseRelativeRedirects() {
+            return this.useRelativeRedirects;
+        }
+
+        public void setUseRelativeRedirects(boolean useRelativeRedirects) {
+            this.useRelativeRedirects = useRelativeRedirects;
+        }
+
+        /** @deprecated */
+        @Deprecated
+        public void setUseRelativeRedirects(Boolean useRelativeRedirects) {
+            this.useRelativeRedirects = useRelativeRedirects != null ? useRelativeRedirects : false;
+        }
+
+        public Charset getUriEncoding() {
+            return this.uriEncoding;
+        }
+
+        public void setUriEncoding(Charset uriEncoding) {
+            this.uriEncoding = uriEncoding;
+        }
+
+        public int getMaxConnections() {
+            return this.maxConnections;
+        }
+
+        public void setMaxConnections(int maxConnections) {
+            this.maxConnections = maxConnections;
+        }
+
+        public DataSize getMaxSwallowSize() {
+            return this.maxSwallowSize;
+        }
+
+        public void setMaxSwallowSize(DataSize maxSwallowSize) {
+            this.maxSwallowSize = maxSwallowSize;
+        }
+
+        public int getAcceptCount() {
+            return this.acceptCount;
+        }
+
+        public void setAcceptCount(int acceptCount) {
+            this.acceptCount = acceptCount;
+        }
+
+        public int getProcessorCache() {
+            return this.processorCache;
+        }
+
+        public void setProcessorCache(int processorCache) {
+            this.processorCache = processorCache;
+        }
+
+        public List<String> getAdditionalTldSkipPatterns() {
+            return this.additionalTldSkipPatterns;
+        }
+
+        public void setAdditionalTldSkipPatterns(List<String> additionalTldSkipPatterns) {
+            this.additionalTldSkipPatterns = additionalTldSkipPatterns;
+        }
+
+        public List<Character> getRelaxedPathChars() {
+            return this.relaxedPathChars;
+        }
+
+        public void setRelaxedPathChars(List<Character> relaxedPathChars) {
+            this.relaxedPathChars = relaxedPathChars;
+        }
+
+        public List<Character> getRelaxedQueryChars() {
+            return this.relaxedQueryChars;
+        }
+
+        public void setRelaxedQueryChars(List<Character> relaxedQueryChars) {
+            this.relaxedQueryChars = relaxedQueryChars;
+        }
+
+        public Duration getConnectionTimeout() {
+            return this.connectionTimeout;
+        }
+
+        public void setConnectionTimeout(Duration connectionTimeout) {
+            this.connectionTimeout = connectionTimeout;
+        }
+
+        public ServerProperties.Tomcat.Resource getResource() {
+            return this.resource;
+        }
+
+        public ServerProperties.Tomcat.Mbeanregistry getMbeanregistry() {
+            return this.mbeanregistry;
+        }
+
+        public ServerProperties.Tomcat.Remoteip getRemoteip() {
+            return this.remoteip;
+        }
+
+        public static class Remoteip {
+            private String internalProxies = "10\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|192\\.168\\.\\d{1,3}\\.\\d{1,3}|169\\.254\\.\\d{1,3}\\.\\d{1,3}|127\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|172\\.1[6-9]{1}\\.\\d{1,3}\\.\\d{1,3}|172\\.2[0-9]{1}\\.\\d{1,3}\\.\\d{1,3}|172\\.3[0-1]{1}\\.\\d{1,3}\\.\\d{1,3}|0:0:0:0:0:0:0:1|::1";
+            private String protocolHeader;
+            private String protocolHeaderHttpsValue = "https";
+            private String hostHeader = "X-Forwarded-Host";
+            private String portHeader = "X-Forwarded-Port";
+            private String remoteIpHeader;
+
+            public Remoteip() {
+            }
+
+            public String getInternalProxies() {
+                return this.internalProxies;
+            }
+
+            public void setInternalProxies(String internalProxies) {
+                this.internalProxies = internalProxies;
+            }
+
+            public String getProtocolHeader() {
+                return this.protocolHeader;
+            }
+
+            public void setProtocolHeader(String protocolHeader) {
+                this.protocolHeader = protocolHeader;
+            }
+
+            public String getProtocolHeaderHttpsValue() {
+                return this.protocolHeaderHttpsValue;
+            }
+
+            public String getHostHeader() {
+                return this.hostHeader;
+            }
+
+            public void setHostHeader(String hostHeader) {
+                this.hostHeader = hostHeader;
+            }
+
+            public void setProtocolHeaderHttpsValue(String protocolHeaderHttpsValue) {
+                this.protocolHeaderHttpsValue = protocolHeaderHttpsValue;
+            }
+
+            public String getPortHeader() {
+                return this.portHeader;
+            }
+
+            public void setPortHeader(String portHeader) {
+                this.portHeader = portHeader;
+            }
+
+            public String getRemoteIpHeader() {
+                return this.remoteIpHeader;
+            }
+
+            public void setRemoteIpHeader(String remoteIpHeader) {
+                this.remoteIpHeader = remoteIpHeader;
+            }
+        }
+
+        public static class Mbeanregistry {
+            private boolean enabled;
+
+            public Mbeanregistry() {
+            }
+
+            public boolean isEnabled() {
+                return this.enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
+            }
+        }
+
+        public static class Resource {
+            private boolean allowCaching = true;
+            private Duration cacheTtl;
+
+            public Resource() {
+            }
+
+            public boolean isAllowCaching() {
+                return this.allowCaching;
+            }
+
+            public void setAllowCaching(boolean allowCaching) {
+                this.allowCaching = allowCaching;
+            }
+
+            public Duration getCacheTtl() {
+                return this.cacheTtl;
+            }
+
+            public void setCacheTtl(Duration cacheTtl) {
+                this.cacheTtl = cacheTtl;
+            }
+        }
+
+        public static class Threads {
+            private int max = 200;
+            private int minSpare = 10;
+
+            public Threads() {
+            }
+
+            public int getMax() {
+                return this.max;
+            }
+
+            public void setMax(int max) {
+                this.max = max;
+            }
+
+            public int getMinSpare() {
+                return this.minSpare;
+            }
+
+            public void setMinSpare(int minSpare) {
+                this.minSpare = minSpare;
+            }
+        }
+
+        public static class Accesslog {
+            private boolean enabled = false;
+            private String conditionIf;
+            private String conditionUnless;
+            private String pattern = "common";
+            private String directory = "logs";
+            protected String prefix = "access_log";
+            private String suffix = ".log";
+            private String encoding;
+            private String locale;
+            private boolean checkExists = false;
+            private boolean rotate = true;
+            private boolean renameOnRotate = false;
+            private int maxDays = -1;
+            private String fileDateFormat = ".yyyy-MM-dd";
+            private boolean ipv6Canonical = false;
+            private boolean requestAttributesEnabled = false;
+            private boolean buffered = true;
+
+            public Accesslog() {
+            }
+
+            public boolean isEnabled() {
+                return this.enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
+            }
+
+            public String getConditionIf() {
+                return this.conditionIf;
+            }
+
+            public void setConditionIf(String conditionIf) {
+                this.conditionIf = conditionIf;
+            }
+
+            public String getConditionUnless() {
+                return this.conditionUnless;
+            }
+
+            public void setConditionUnless(String conditionUnless) {
+                this.conditionUnless = conditionUnless;
+            }
+
+            public String getPattern() {
+                return this.pattern;
+            }
+
+            public void setPattern(String pattern) {
+                this.pattern = pattern;
+            }
+
+            public String getDirectory() {
+                return this.directory;
+            }
+
+            public void setDirectory(String directory) {
+                this.directory = directory;
+            }
+
+            public String getPrefix() {
+                return this.prefix;
+            }
+
+            public void setPrefix(String prefix) {
+                this.prefix = prefix;
+            }
+
+            public String getSuffix() {
+                return this.suffix;
+            }
+
+            public void setSuffix(String suffix) {
+                this.suffix = suffix;
+            }
+
+            public String getEncoding() {
+                return this.encoding;
+            }
+
+            public void setEncoding(String encoding) {
+                this.encoding = encoding;
+            }
+
+            public String getLocale() {
+                return this.locale;
+            }
+
+            public void setLocale(String locale) {
+                this.locale = locale;
+            }
+
+            public boolean isCheckExists() {
+                return this.checkExists;
+            }
+
+            public void setCheckExists(boolean checkExists) {
+                this.checkExists = checkExists;
+            }
+
+            public boolean isRotate() {
+                return this.rotate;
+            }
+
+            public void setRotate(boolean rotate) {
+                this.rotate = rotate;
+            }
+
+            public boolean isRenameOnRotate() {
+                return this.renameOnRotate;
+            }
+
+            public void setRenameOnRotate(boolean renameOnRotate) {
+                this.renameOnRotate = renameOnRotate;
+            }
+
+            public int getMaxDays() {
+                return this.maxDays;
+            }
+
+            public void setMaxDays(int maxDays) {
+                this.maxDays = maxDays;
+            }
+
+            public String getFileDateFormat() {
+                return this.fileDateFormat;
+            }
+
+            public void setFileDateFormat(String fileDateFormat) {
+                this.fileDateFormat = fileDateFormat;
+            }
+
+            public boolean isIpv6Canonical() {
+                return this.ipv6Canonical;
+            }
+
+            public void setIpv6Canonical(boolean ipv6Canonical) {
+                this.ipv6Canonical = ipv6Canonical;
+            }
+
+            public boolean isRequestAttributesEnabled() {
+                return this.requestAttributesEnabled;
+            }
+
+            public void setRequestAttributesEnabled(boolean requestAttributesEnabled) {
+                this.requestAttributesEnabled = requestAttributesEnabled;
+            }
+
+            public boolean isBuffered() {
+                return this.buffered;
+            }
+
+            public void setBuffered(boolean buffered) {
+                this.buffered = buffered;
+            }
+        }
+    }
+
+    public static class Servlet {
+        private final Map<String, String> contextParameters = new HashMap();
+        private String contextPath;
+        private String applicationDisplayName = "application";
+        private boolean registerDefaultServlet = true;
+        @NestedConfigurationProperty
+        private final Encoding encoding = new Encoding();
+        @NestedConfigurationProperty
+        private final Jsp jsp = new Jsp();
+        @NestedConfigurationProperty
+        private final Session session = new Session();
+
+        public Servlet() {
+        }
+
+        public String getContextPath() {
+            return this.contextPath;
+        }
+
+        public void setContextPath(String contextPath) {
+            this.contextPath = this.cleanContextPath(contextPath);
+        }
+
+        private String cleanContextPath(String contextPath) {
+            String candidate = StringUtils.trimWhitespace(contextPath);
+            return StringUtils.hasText(candidate) && candidate.endsWith("/") ? candidate.substring(0, candidate.length() - 1) : candidate;
+        }
+
+        public String getApplicationDisplayName() {
+            return this.applicationDisplayName;
+        }
+
+        public void setApplicationDisplayName(String displayName) {
+            this.applicationDisplayName = displayName;
+        }
+
+        public boolean isRegisterDefaultServlet() {
+            return this.registerDefaultServlet;
+        }
+
+        public void setRegisterDefaultServlet(boolean registerDefaultServlet) {
+            this.registerDefaultServlet = registerDefaultServlet;
+        }
+
+        public Map<String, String> getContextParameters() {
+            return this.contextParameters;
+        }
+
+        public Encoding getEncoding() {
+            return this.encoding;
+        }
+
+        public Jsp getJsp() {
+            return this.jsp;
+        }
+
+        public Session getSession() {
+            return this.session;
+        }
+    }
+}

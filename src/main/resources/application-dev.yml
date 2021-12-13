@@ -1,0 +1,10 @@
+# 开发环境
+server:
+  port: 8081 # 开发环境端口号
+#  servlet:
+#    context-path: /in-dev # 开发环境上下文路径
+
+spring:
+  config:
+    activate:
+      on-profile: dev

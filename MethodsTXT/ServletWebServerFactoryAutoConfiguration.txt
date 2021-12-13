@@ -1,0 +1,84 @@
+@Configuration(   //表示这是一个配置类，与 xml 配置文件等价，也可以给容器中添加组件
+
+        proxyBeanMethods = false
+)
+@AutoConfigureOrder(-2147483648)
+@ConditionalOnClass({ServletRequest.class})//判断当前项目有没有 ServletRequest 这个类
+@ConditionalOnWebApplication(// 判断当前应用是否是 web 应用，如果是，当前配置类生效
+type = Type.SERVLET
+)
+@EnableConfigurationProperties({ServerProperties.class})
+//启动指定类的属性配置（ConfigurationProperties）功能；将配置文件中对应的值和 ServerProperties 绑定起来；并把 ServerProperties 加入到ioc容器中
+@Import({ServletWebServerFactoryAutoConfiguration.BeanPostProcessorsRegistrar.class, EmbeddedTomcat.class, EmbeddedJetty.class, EmbeddedUndertow.class})
+public class ServletWebServerFactoryAutoConfiguration {
+    public ServletWebServerFactoryAutoConfiguration() {
+    }
+
+    @Bean //给容器中添加一个组件，这个组件的某些值需要从properties中获取
+    public ServletWebServerFactoryCustomizer servletWebServerFactoryCustomizer(ServerProperties serverProperties, ObjectProvider<WebListenerRegistrar> webListenerRegistrars) {
+        return new ServletWebServerFactoryCustomizer(serverProperties, (List) webListenerRegistrars.orderedStream().collect(Collectors.toList()));
+    }
+
+    @Bean
+    @ConditionalOnClass(
+            name = {"org.apache.catalina.startup.Tomcat"}
+    )
+    public TomcatServletWebServerFactoryCustomizer tomcatServletWebServerFactoryCustomizer(ServerProperties serverProperties) {
+        return new TomcatServletWebServerFactoryCustomizer(serverProperties);
+    }
+
+    @Bean
+    @ConditionalOnMissingFilterBean({ForwardedHeaderFilter.class})
+    @ConditionalOnProperty(
+            value = {"server.forward-headers-strategy"},
+            havingValue = "framework"
+    )
+    public FilterRegistrationBean<ForwardedHeaderFilter> forwardedHeaderFilter() {
+        ForwardedHeaderFilter filter = new ForwardedHeaderFilter();
+        FilterRegistrationBean<ForwardedHeaderFilter> registration = new FilterRegistrationBean(filter, new ServletRegistrationBean[0]);
+        registration.setDispatcherTypes(DispatcherType.REQUEST, new DispatcherType[]{DispatcherType.ASYNC, DispatcherType.ERROR});
+        registration.setOrder(-2147483648);
+        return registration;
+    }
+
+    public static class BeanPostProcessorsRegistrar implements ImportBeanDefinitionRegistrar, BeanFactoryAware {
+        private ConfigurableListableBeanFactory beanFactory;
+
+        public BeanPostProcessorsRegistrar() {
+        }
+
+        public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+            if (beanFactory instanceof ConfigurableListableBeanFactory) {
+                this.beanFactory = (ConfigurableListableBeanFactory) beanFactory;
+            }
+
+        }
+
+        public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
+            if (this.beanFactory != null) {
+                this.registerSyntheticBeanIfMissing(registry, "webServerFactoryCustomizerBeanPostProcessor", WebServerFactoryCustomizerBeanPostProcessor.class, WebServerFactoryCustomizerBeanPostProcessor::new);
+                this.registerSyntheticBeanIfMissing(registry, "errorPageRegistrarBeanPostProcessor", ErrorPageRegistrarBeanPostProcessor.class, ErrorPageRegistrarBeanPostProcessor::new);
+            }
+        }
+
+        private <T> void registerSyntheticBeanIfMissing(BeanDefinitionRegistry registry, String name, Class<T> beanClass, Supplier<T> instanceSupplier) {
+            if (ObjectUtils.isEmpty(this.beanFactory.getBeanNamesForType(beanClass, true, false))) {
+                RootBeanDefinition beanDefinition = new RootBeanDefinition(beanClass, instanceSupplier);
+                beanDefinition.setSynthetic(true);
+                registry.registerBeanDefinition(name, beanDefinition);
+            }
+
+        }
+    }
+}
+
+该类使用了:
+    @Configuration 定义配置类
+    @Bean 在 @Configuration 注解的类内部使用,可包含多个.用于构建 Bean 并添加到 Spring 容器中.(方法名即为 spring 的xml配置文件中 <bean> 标签的 id/name 属性,返回值为 class 属性)
+    5 个 @Conditional 衍生注解
+    1 @ConditionalOnClass({ServletRequest.class}) 判断当前项目是否存在 ServletRequest 类
+    2 @ConditionalOnWebApplication(type = Type.SERVLET) 判断当前项目是否为 Web 应用
+    3 @ConditionalOnClass(name = {"org.apache.catalina.startup.Tomcat"}) 判断是否存在 Tomcat 类
+    4 @ConditionalOnMissingFilterBean({ForwardHeaderFilter.class}) 判断容器中是否存在 ForwardedHeaderFilter 这个过滤器
+    5 @ConditionalOnProperty(value = {"server.forward-headers-strategy"}, havingValue = "framework") 判断配置文件中是否存在 server.forward-headers-strategy = framework 这一对键值对
+    (有 Missing 的则为否定生效)

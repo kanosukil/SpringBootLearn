@@ -1,0 +1,22 @@
+public static <T> List<T> loadFactories(Class<T> factoryType, @Nullable ClassLoader classLoader) {
+    Assert.notNull(factoryType, "'factoryType' must not be null");
+    ClassLoader classLoaderToUse = classLoader;
+    if (classLoader == null) {
+        classLoaderToUse = SpringFactoriesLoader.class.getClassLoader();
+    }
+    // 调用loadFactoryNames获取接口的实现类
+    List<String> factoryImplementationNames = loadFactoryNames(factoryType, classLoaderToUse);
+    if (logger.isTraceEnabled()) {
+        logger.trace("Loaded [" + factoryType.getName() + "] names: " + factoryImplementationNames);
+    }
+    // 遍历 factoryNames 数组，创建实现类的对象
+    List<T> result = new ArrayList(factoryImplementationNames.size());
+    Iterator var5 = factoryImplementationNames.iterator();
+    //排序
+    while(var5.hasNext()) {
+        String factoryImplementationName = (String)var5.next();
+        result.add(instantiateFactory(factoryImplementationName, factoryType, classLoaderToUse));
+    }
+    AnnotationAwareOrderComparator.sort(result);
+    return result;
+}
