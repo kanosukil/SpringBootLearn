@@ -1,4 +1,4 @@
-#学习SpringBoot
+# 学习SpringBoot
 
 >***注*** :端口被占用  cmd 指令:
 >>
@@ -11,7 +11,7 @@
 !!!注!!!: 注入Bean时不能使用 驼峰命名 mybatis 需要关闭驼峰命名法 (解决方法 **未知**)
 
 ---
-###项目结构
+### 项目结构
 
 `/src/main/java`:程序入口
 
@@ -19,7 +19,7 @@
 
 `/src/test`:测试入口
 
-###引入Web模块
+### 引入Web模块
 
 在`pom.xml`(Maven配置文件)中引入依赖模块:
 
@@ -34,7 +34,7 @@
 >***注***:@SpringApplicationConfiguration注解已失效,应替换成@SpringBootTest
 
 ---
-##SpringBoot Starter
+## SpringBoot Starter
 
 **Starter(启动器)** 整合了应用研发的场景下可能用到的各种依赖, 程序员只需要 **在Maven中引入Starter依赖** ,SpringBoot就可自动扫描到要加载的信息并启动相应默认配置. Starter提供了大量自动配置,且所有Starter都遵循约定成俗的默认配置,并允许调整配置 (**约定大于配置**)
 
@@ -44,7 +44,7 @@
 
 通过 `mvn dependency:tree` 命令可知,SpringBoot导入了Springframework logging jackson Tomcat等依赖(开发Web项目时所需的).
 
-###spring-boot-starter-parent (版本仲裁中心)
+### spring-boot-starter-parent (版本仲裁中心)
 
 spring-boot-starter-parent是 **所有** SpringBoot项目的父级依赖,可对项目内的部分常用依赖进行统一管理.
 
