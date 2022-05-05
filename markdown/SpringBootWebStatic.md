@@ -43,8 +43,9 @@ SpringBoot提供的3种默认静态资源映射规则
     * 访问 '/' 或 '/index.html' 时,将跳转到静态首页(欢迎页)
   > 注: 同样由查找顺序优先级
 ---
-##SpringBoot 定制 SpringMVC
+## SpringBoot 定制 SpringMVC
 SpringBoot抛弃了传统的xml配置文件,通过配置类(标识@Configuration的类)以JavaBean的形式进行相关配置
+
 > SpringBoot对SpringMVC的自动配置可以满足大部分需求,但也可以通过自定义配置类并实现WebMvcConfiguration接口定制SpringMVC配置(拦截器、格式化程序、视图控制器等)
 >> * SpringBoot1.5及之前通过继承WebMvcConfigurationAdapter抽象类定制SpringMVC
 >> * SpringBoot2.0后改为实现WebMvcConfigurer接口定制SpringMVC
@@ -150,7 +151,7 @@ SpringBoot的自动配置不能满足需求时，自定义一个 `WebMvcConfigur
 ---
 ---
 
-##SpringBoot 整合 Thymeleaf
+## SpringBoot 整合 Thymeleaf
 [Thymeleaf学习](ThymeleafStudy.md)
 
 SpringBoot 推荐使用 Thymeleaf 作为模板引擎. SpringBoot 为 Thymeleaf 提供一系列默认配置, SpringBoot 项目一旦导入 Thymeleaf 依赖,相应的自动配置就会自动生效(ThymeleafAutoConfiguration 或 FreeMarkerAutoConfiguration)

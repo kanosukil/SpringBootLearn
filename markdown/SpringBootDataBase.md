@@ -1,4 +1,4 @@
-## SpringBoot 访问 JDBC 数据库
+# SpringBoot 访问 JDBC 数据库
 * 导入JDBC场景启动器(starter)
     * 引入依赖
 ```xml
@@ -56,7 +56,7 @@
     * 在用户没有配置数据源的情况，若容器中存在 HikariDataSource 类，则 Spring Boot 就会自动实例化 Hikari，并将其作为其数据源。
     * Spring Boot 的 JDBC 场景启动器（spring-boot-starter-data-jdbc）通过 spring- boot-starter-jdbc 默认引入了 HikariCP 数据源（包含 HikariDataSource 类），因此 Spring Boot 默认使用 HikariCP 作为其数据源。
 ---
-###Spring Boot整合Druid数据源
+### Spring Boot整合Druid数据源
 * Druid 是阿里巴巴推出的一款开源的高性能数据源产品，Druid 支持所有 JDBC 兼容的数据库，包括 Oracle、MySQL、SQL Server 和 H2 等等。Druid 不仅结合了 C3P0、DBCP 和 PROXOOL 等数据源产品的优点，同时还加入了强大的监控功能。通过 Druid 的监控功能，可以实时观察数据库连接池和 SQL 的运行情况，帮助用户及时排查出系统中存在的问题。
 * Druid 非 Springboot 提供的技术, 其属于第三方,需要通过一定方法整合:
     * 自定义整合 Druid
@@ -88,7 +88,7 @@
                  <version>1.2.6</version>
                 </dependency>
             </dependencise>
-            ```
+           ```
         2. 创建数据源
             * 向容器中添加Druid数据源类(DruidDataSource 继承自Datasource),让Springboot 使用 Druid 作为数据源,不再使用HikariCP
             * 见 [TestDataSourceConfig.java](../src/main/java/com/learnboot/springbootlearn/config/TestDataSourceConfig.java)

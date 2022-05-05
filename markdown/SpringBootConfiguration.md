@@ -1,4 +1,5 @@
-###SpringBoot的两种全局配置文件:
+# SpringBoot的两种全局配置文件
+
 1. application.properties
 2. application.yml
 
@@ -9,7 +10,7 @@
 [YAML学习(入门)](YAMLStudy.md)
 
 ---
-##SpringBoot配置绑定
+## SpringBoot配置绑定
 
 配置绑定 意为:将配置文件的值与JavaBean中对应属性进行绑定.
 
@@ -60,12 +61,13 @@
 >***注*** :.properties文件默认编码为ios-5529-1输入中文将自动转码,idea需要在`settings -> editor -> file encodings` 内修改编码
 
 ---
-##***SpringBoot导入Spring配置***
+## SpringBoot导入Spring配置
+
 * 默认情况,SpringBoot不包含任何Spring配置文件(即便是手动添加,也不会识别).但SpringBoot提供了其他方法导入Spring配置
     * @ImportResource注解加载Spring配置文件
     * 使用全注解的方式加载Spring配置
 
-###**@ImportResource**导入Spring配置文件
+### **@ImportResource**导入Spring配置文件
 
 在主启动类上使用@ImportResource注解可导入一个或多个Spring配置文件,并使其生效
 
@@ -78,26 +80,26 @@
 
 >若没有配置主启动程序类的@ImportResource注解,IOC容器中将识别不到Spring配置文件
 
-###**全注解**加载Spring配置
+### **全注解**加载Spring配置
 
 * 实现方式:
     1. 使用 @Configuration 注解定义配置类,替换Spring配置文件
     2. 配置类内部可包含一个或多个被 @Bean 注解的方法(被注解的方法将被 AnnotationConfigApplicationContext 或 AnnotationConfigWebApplicationContext 类扫描,以构建bean的定义[相当于Spring配置文件中的<bean></bean>标签].方法的返回值将会以组件的方式加载到容器中,组件的id即为方法名)
 
-###***总结***
+### ***总结***
 
 * SpringBoot加载Spring的配置
     * @ImportResource(locations={"path"}) 写在主启动程序类中(需要写好Spring配置文件)
     * 全注解 创建以 @Configuration 注解定义的配置类,其中使用 @Bean 注解定义配置方法(方法名为组件id;方法返回值为组件)(无需再主启动程序类中添加额外的注解;不需要Spring配置文件)
 
 ---
-##SpringBootProfile(多环境配置)
+## SpringBootProfile(多环境配置)
 
 实际项目中开发时通常都会有多个环境(开发环境 测试环境 生产环境)不同环境配置也不同(开发环境使用开发数据库 测试环境使用测试数据库 生产环境使用线上正式数据库)
 
 Profile为不同环境的不同配置提供支持(可以通过激活 指定参数的方式快速切换环境)
 
-###多Profile文件方式
+### 多Profile文件方式
 
 >***properties文件的优先级高于yml文件(不管是主配置文件还是环境配置文件)***
 
@@ -167,7 +169,7 @@ Profile为不同环境的不同配置提供支持(可以通过激活 指定参�
 
 SpringBoot启动时会将resources目录下的application.properties文件或application.yml文件作为其默认配置文件,但并不意味这SpringBoot项目中只能存在一个application.properties或application.yml文件
 
-###默认配置文件
+### 默认配置文件
 
 ***SpringBoot项目可以存在多个application.properties或application.yml文件***
 
@@ -186,7 +188,7 @@ SpringBoot启动时会将resources目录下的application.properties文件或app
 >> * 存在不同的配置内容时,高优先级和低优先级的配置内容取并集
 
 ---
-##SpringBoot外部配置文件
+## SpringBoot外部配置文件
 
 * 指定外部配置文件的路径的参数
     * spring.config.location
@@ -251,7 +253,7 @@ Maven 对项目打包时,位于项目根目录的配置文件将无法被打包�
     5. 先加载.properties文件,再加载.yml文件
 
 ---
-##SpringBoot自动配置原理
+## SpringBoot自动配置原理
 
 由于SpringBoot自动化配置,因此SpringBoot项目创建完成后,即使不进行任何配置,也可运行
 

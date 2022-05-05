@@ -1,4 +1,4 @@
-##SpringBoot 自定义 starter
+## SpringBoot 自定义 starter
 1. 命名规范
    * 官方的 starter 命名形式: spring-boot-starter-xxx 
    * 第三方自定义的 starter 命名形式: xxx-spring-boot-starter

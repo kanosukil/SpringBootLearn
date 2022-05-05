@@ -1,4 +1,4 @@
-##SpringBoot 异常处理
+## SpringBoot 异常处理
 
 SpringBoot提供的默认异常处理机制,会在出现异常时,自动识别客户端的类型(浏览器客户端\机器客户端),依此展示不同异常信息.
 
@@ -82,9 +82,11 @@ SpringBoot提供的默认异常处理机制,会在出现异常时,自动识别�
 
 ***1.自定义异常处理类***
 @ControllerAdvice 注解的类可实现全局异常处理
+
 > 示例见:
 > [userNotExistException.java](../src/main/java/com/learnboot/springbootlearn/exception/UserNotExistException.java)
 > [TestException.java](../src/main/java/com/learnboot/springbootlearn/controller/TestExceptionHandler.java)
 
 ***2.自定义错误属性处理工具***
+
 > 见: [MyErrorAttributes](../src/main/java/com/learnboot/springbootlearn/component/MyErrorAttributes.java)

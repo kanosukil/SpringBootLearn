@@ -6,9 +6,9 @@
 >>
 >>`taskkill -f -pid 占用端口的pid`
 >>
-> bean 的属性名最好为全小写
+> **bean 的属性名最好为全小写**
 
-!!!注!!!: 注入Bean时不能使用 驼峰命名 mybatis 需要关闭驼峰命名法 (解决方法 **未知**)
+**注**: 注入Bean时不能使用 驼峰命名 mybatis 需要关闭驼峰命名法 (解决方法 **未知**)
 
 ---
 ### 项目结构
@@ -72,5 +72,4 @@ Springboot项目可以通过继承spring-boot-starter-parent来获得一些合�
 * [SpringBoot 注册Web原生组件](markdown/SpringBootWebRegistration.md)
 * [SpringBoot 数据库](markdown/SpringBootDataBase.md)
 * [SpringBoot 自定义Starter](markdown/SpringBootStarter.md) <label style="color:red;">(拓展)[非必须]</label>
-
 

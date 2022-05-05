@@ -1,4 +1,4 @@
-##统一日志框架
+## 统一日志框架
 
 + 日志:
     1. 功能
@@ -8,6 +8,7 @@
         - 日志门面(日志抽象层)
         - 日志实现
 > JavaBoot 使用 SLF4J + Logback 组合记录日志
+>
 > > 使用 SLF4J + Logback 组合记录日志时, 只要导入 SLF4J 和 Logback 的 Jar 包即可 (其他组合都需要导入相应的适配层的 Jar 包)
 
 * 不同应用框架可能使用不同的日志框架,因此需要统一日志框架的使用.
@@ -86,7 +87,7 @@ SpringBoot 日志输出内容默认包括:
 
 ![示例](../learn_Image/日志信息.png "SpringBoot日志信息")
 
-###修改默认日志配置
+### 修改默认日志配置
 * 通过全集配置文件(application.properties/yml)修改SpringBoot日志级别和显示格式等默认配置
     * 详见 [application.properties](../src/main/resources/application.properties)
 

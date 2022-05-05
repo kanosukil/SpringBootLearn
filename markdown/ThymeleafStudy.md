@@ -1,4 +1,4 @@
-##Thymeleaf
+## Thymeleaf
 渲染 XML/XHTML/HTML5d 内容的模板引擎(与 JSP Velocity FreeMaker 等模板引擎类似,可轻易与 SpringMVC 等 Web 框架集成)[最大特点:不启动 Web 应用也可以直接在浏览器种打开并正确显示模板页面]
 
 + 特点:
@@ -192,4 +192,3 @@
       </div>
       ```
         - ***在声明的页面***
-  
